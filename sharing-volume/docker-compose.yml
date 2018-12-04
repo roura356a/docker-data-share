@@ -1,0 +1,33 @@
+version: '3.7'
+
+networks:
+  webappnet:
+    external: true
+    name: localdev
+
+volumes:
+  webappvol:
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: service-web
+    networks:
+    - webappnet
+    restart: on-failure
+    environment:
+      VIRTUAL_HOST: test.docker
+    volumes:
+    - webappvol:/var/www/html/bundles
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    container_name: service-app
+    networks:
+    - webappnet
+    restart: on-failure
+    volumes:
+    - webappvol:/var/www/html/bundles
